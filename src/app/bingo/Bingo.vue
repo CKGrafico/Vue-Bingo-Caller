@@ -35,6 +35,7 @@ export default class extends Vue {
 @import '~styles/variables';
 
 .bingo {
+  padding-top: 2vh;
   height: 100vh;
 
   &-logo {

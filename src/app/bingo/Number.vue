@@ -31,6 +31,7 @@ export default class extends Vue {
   $size: 6rem;
 
   align-items: center;
+  background: $color-background-darker;
   border-radius: 50%;
   cursor: pointer;
   display: flex;
@@ -39,10 +40,11 @@ export default class extends Vue {
   margin: .25rem;
   justify-content: center;
   opacity: .15;
+  transition: $animation-speed-default;
   width: $size;
 
   &.is-on {
-    background-color: $color-primary;
+    background: radial-gradient(ellipse at top left, $color-primary-brighter 0%,$color-primary 100%); 
     opacity: 1;
   }
 }
