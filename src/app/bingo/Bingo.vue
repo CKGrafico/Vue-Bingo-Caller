@@ -1,15 +1,15 @@
 <template>
   <section class="bingo">
-    <img class="bingo-logo" src="/assets/images/logo.png" @dblclick="onClickLogo"/>
+    <img class="bingo-logo" src="/assets/images/logo.png" @dblclick="onClickLogo" />
     <div class="bingo-list" :class="{'is-destroying': destroying}">
-      <Number v-for="number in numberValues" :key="number" :value="number + 1" />
+      <Number class="bingo-number" v-for="number in numberValues" :key="number" :value="number + 1" />
     </div>
   </section>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import Number from './Number.vue';
+import { Component, Vue } from "vue-property-decorator";
+import Number from "./Number.vue";
 
 @Component({
   components: {
@@ -17,7 +17,7 @@ import Number from './Number.vue';
   }
 })
 export default class extends Vue {
-  public name = 'Bingo';
+  public name = "Bingo";
   public numbersCount = 90;
   public numberValues = [];
   public destroying = false;
@@ -28,7 +28,7 @@ export default class extends Vue {
 
   public async onClickLogo(): Promise<void> {
     try {
-      const confirmed = await this.$dialog.confirm('¿BINGO?');
+      const confirmed = await this.$dialog.confirm("¿BINGO?");
       await this.resetBingo();
     } catch (e) {
       // ok
@@ -36,7 +36,7 @@ export default class extends Vue {
   }
 
   private initBingo(): void {
-    this.numberValues = [...Array(this.numbersCount).keys()]
+    this.numberValues = [...Array(this.numbersCount).keys()];
   }
 
   private async resetBingo(): Promise<void> {
@@ -59,7 +59,7 @@ export default class extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '~styles/variables';
+@import "~styles/variables";
 
 .bingo {
   padding-top: 2vh;
@@ -75,10 +75,36 @@ export default class extends Vue {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
+  }
 
-    &.is-destroying {
-      // Magic happens
-      background-color: pink;
+  &-list.is-destroying &-number {
+    // Magic happens
+    &:nth-child(2n) {
+      animation: number1 3s forwards;
+    }
+
+    &:nth-child(2n + 1) {
+      animation: number2 3s forwards;
+    }
+  }
+
+  @keyframes number1 {
+    0% {
+      transform: translateY(0);
+    }
+
+    100% {
+      transform: translateY(-150vh);
+    }
+  }
+
+  @keyframes number2 {
+    0% {
+      transform: translateY(0);
+    }
+
+    100% {
+      transform: translateY(150vh);
     }
   }
 }

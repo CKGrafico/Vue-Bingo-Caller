@@ -448,4 +448,39 @@
     border-bottom: 1px solid #FF8C00;
   }
   
-  
+// More things :P
+
+.dg-backdrop {
+  opacity: 0;
+}
+
+.dg-content-cont--floating {
+  top: 0;
+  transform: none;
+}
+
+.dg-main-content {
+  margin: 0 auto;
+  padding: 5px;
+}
+
+.dg-view-wrapper {
+  align-content: center;
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.dg-content-body {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.dg-content-footer {
+  align-content: center;
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  padding: 0;
+  width: 60%;
+}
