@@ -1,6 +1,7 @@
 <template>
   <section class="bingo">
     <img class="bingo-logo" src="/assets/images/logo.png" @dblclick="onClickLogo" />
+    <h1 class="bingo-title" :class="{'is-destroying': destroying}">BINGO!</h1>
     <div class="bingo-list" :class="{'is-destroying': destroying}">
       <Number class="bingo-number" v-for="number in numberValues" :key="number" :value="number + 1" />
     </div>
@@ -28,7 +29,11 @@ export default class extends Vue {
 
   public async onClickLogo(): Promise<void> {
     try {
-      const confirmed = await this.$dialog.confirm("¿BINGO?");
+      const options = {
+        okText: '👍🏻',
+        cancelText: '🚫'
+      };
+      const confirmed = await this.$dialog.confirm('', options);
       await this.resetBingo();
     } catch (e) {
       // ok
@@ -52,7 +57,7 @@ export default class extends Vue {
       setTimeout(() => {
         this.destroying = false;
         resolve();
-      }, 3000);
+      }, 2000);
     });
   }
 }
@@ -61,12 +66,30 @@ export default class extends Vue {
 <style lang="scss" scoped>
 @import "~styles/variables";
 
+// Ugly css we know! one day to do that you know :P
+
 .bingo {
   padding-top: 2vh;
   height: 100vh;
 
   &-logo {
     margin-left: 2rem;
+  }
+
+  &-title {
+    color: $color-primary;
+    display: none;
+    font-size: 11rem;
+    top: 15vh;
+    position: fixed;
+    text-align: center;
+    width: 100%;
+    z-index: 10;
+
+    &.is-destroying {
+      animation: blink $animation-speed-default infinite;
+      display: block;
+    }
   }
 
   &-list {
@@ -94,7 +117,7 @@ export default class extends Vue {
     }
 
     100% {
-      transform: translateY(-150vh);
+      transform: translateY(-120vh);
     }
   }
 
@@ -104,7 +127,21 @@ export default class extends Vue {
     }
 
     100% {
-      transform: translateY(150vh);
+      transform: translateY(120vh);
+    }
+  }
+
+  @keyframes blink {
+    0% {
+      opacity: 0;
+    }
+
+    50% {
+      opacity: 1;
+    }
+
+    100% {
+      opacity: 0;
     }
   }
 }
