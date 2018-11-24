@@ -1,7 +1,6 @@
 import { Container } from 'inversify';
 import * as s from '~/shared';
-import { demoModule } from '~/demo';
-import { solutionsModule } from '~/solutions';
+import { bingoModule } from '~/bingo';
 import { injectId } from '~/core';
 
 // How to inject a dependency
@@ -16,8 +15,7 @@ export function containerBuilder(): Container {
     container.bind<s.ITranslateService>(injectId(s.TranslateService)).to(s.TranslateService).inSingletonScope();
 
     // Bind services for each module
-    demoModule.container(container);
-    solutionsModule.container(container);
+    bingoModule.container(container);
 
     return container;
 }
