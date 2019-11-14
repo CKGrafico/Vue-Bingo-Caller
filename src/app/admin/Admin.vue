@@ -17,6 +17,8 @@
       <h3>Reset the bingo</h3>
       <button class="admin-button" @dblclick="onClickResetBingo">RESET!</button>
     </div>
+
+    <iframe ref="frame" class="admin-frame" src="/" frameborder="0" @load="onLoadFrame"></iframe>
   </section>
 </template>
 
@@ -33,6 +35,14 @@ export default class extends Vue {
 
   public numberInput = '1';
   public serieInput = '-';
+
+  public onLoadFrame(): void {
+    (this.$refs.frame as HTMLIFrameElement).contentDocument.querySelectorAll('.number').forEach((element: HTMLElement) => {
+      element.style.fontSize = '1rem';
+      element.style.height = '1rem';
+      element.style.width = '1rem';
+    });
+  }
 
   public onClickSendNumberInput(): void {
     localStorage.setItem(LOCAL_STORAGE_BINGO_NUMBER_KEY, `${this.numberInput}`);
@@ -75,6 +85,11 @@ export default class extends Vue {
     &-button {
       font-size: 1.5rem;
       padding: .5rem;
+    }
+
+    &-frame {
+      height: 30vh;
+      width: 100vw;
     }
   }
 </style>
