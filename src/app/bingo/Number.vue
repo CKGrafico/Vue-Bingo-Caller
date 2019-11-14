@@ -14,12 +14,12 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 })
 export default class extends Vue {
   public name = 'Number';
-  public state = false;
 
   @Prop({ type: Number, required: true }) value: number;
+  @Prop({ type: Boolean, default: false }) state: boolean;
 
   public toggle(): void {
-    this.state = !this.state;
+    this.$emit('update:state', !this.state);
   }
 }
 </script>

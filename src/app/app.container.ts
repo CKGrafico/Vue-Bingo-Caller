@@ -1,7 +1,8 @@
 import { Container } from 'inversify';
-import * as s from '~/shared';
+import { adminModule } from '~/admin';
 import { bingoModule } from '~/bingo';
 import { injectId } from '~/core';
+import * as s from '~/shared';
 
 // How to inject a dependency
 // @Inject() nameService: INameService;
@@ -16,6 +17,7 @@ export function containerBuilder(): Container {
 
     // Bind services for each module
     bingoModule.container(container);
+    adminModule.container(container);
 
     return container;
 }
