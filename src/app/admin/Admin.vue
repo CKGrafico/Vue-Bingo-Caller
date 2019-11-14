@@ -59,3 +59,22 @@ export default class extends Vue {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  .admin {
+    &-section {
+      border: 1px solid rgba(#FFFFFF, .25);
+      margin: .5rem;
+      padding: .5rem;
+    }
+
+    &-input {
+      font-size: 1.5rem;
+    }
+
+    &-button {
+      font-size: 1.5rem;
+      padding: .5rem;
+    }
+  }
+</style>
