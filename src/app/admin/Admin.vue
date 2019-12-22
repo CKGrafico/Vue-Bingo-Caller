@@ -15,7 +15,13 @@
 
     <div class="admin-section">
       <h3>Reset the bingo</h3>
-      <button class="admin-button" @dblclick="onClickResetBingo">RESET!</button>
+      <button class="admin-button" @dblclick="onClickResetBingo">BINGO!</button>
+      <button class="admin-button">----</button>
+      <button class="admin-button" @dblclick="onClickLine">LINE!</button>
+    </div>
+
+    <div class="admin-section">
+      <h3>Line</h3>
     </div>
 
     <iframe ref="frame" class="admin-frame" src="/" frameborder="0" @load="onLoadFrame"></iframe>
@@ -24,7 +30,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { LOCAL_STORAGE_BINGO_NUMBER_KEY, LOCAL_STORAGE_BINGO_SERIE_KEY, LOCAL_STORAGE_BINGO_RESET_KEY } from '../shared';
+import { LOCAL_STORAGE_BINGO_NUMBER_KEY, LOCAL_STORAGE_BINGO_SERIE_KEY, LOCAL_STORAGE_BINGO_RESET_KEY, LOCAL_STORAGE_BINGO_LINE_KEY } from '../shared';
 
 @Component
 export default class extends Vue {
@@ -58,6 +64,11 @@ export default class extends Vue {
 
   public onClickResetBingo(): void {
     localStorage.setItem(LOCAL_STORAGE_BINGO_RESET_KEY, '1');
+    setTimeout(() => this.onLoadFrame(), 4000);
+  }
+
+  public onClickLine(): void {
+    localStorage.setItem(LOCAL_STORAGE_BINGO_LINE_KEY, '1');
   }
 
   public onFocusNumberInput(): void {
@@ -88,8 +99,8 @@ export default class extends Vue {
     }
 
     &-frame {
-      height: 30vh;
-      width: 100vw;
+      height: 35vh;
+      width: 90vw;
     }
   }
 </style>

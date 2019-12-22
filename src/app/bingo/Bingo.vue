@@ -10,6 +10,11 @@
       class="bingo-title"
       :class="{'is-destroying': destroying}"
     >BINGO!</h1>
+
+    <h1
+      class="bingo-title_line"
+      :class="{'is-line': line}"
+    >LINE!</h1>
     <div
       class="bingo-list"
       :class="{'is-destroying': destroying}"
@@ -28,7 +33,12 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import Number from './Number.vue';
-import { LOCAL_STORAGE_BINGO_NUMBER_KEY, LOCAL_STORAGE_BINGO_SERIE_KEY, LOCAL_STORAGE_BINGO_RESET_KEY } from '../shared';
+import {
+  LOCAL_STORAGE_BINGO_NUMBER_KEY,
+  LOCAL_STORAGE_BINGO_SERIE_KEY,
+  LOCAL_STORAGE_BINGO_RESET_KEY,
+  LOCAL_STORAGE_BINGO_LINE_KEY
+} from '../shared';
 
 @Component({
   components: {
@@ -40,6 +50,9 @@ export default class extends Vue {
   public numbersCount = 90;
   public numberValues = [];
   public destroying = false;
+  public line = false;
+  public startTime = performance.now();
+  public maxTime = 500;
   public ls = {
     bingoNumber: -1,
     bingoSerie: '-'
@@ -81,6 +94,16 @@ export default class extends Vue {
     this.initBingo();
   }
 
+  private asynv; animateLine(): Promise<void> {
+    return new Promise(resolve => {
+      this.line = true;
+      setTimeout(() => {
+        this.line = false;
+        resolve();
+      }, 2000);
+    });
+  }
+
   private async destroyBingoUI(): Promise<{}> {
     return new Promise(resolve => {
       this.destroying = true;
@@ -94,37 +117,62 @@ export default class extends Vue {
   private watchForMessages(): void {
     // TODO strategy my goood!!
 
-    // Bingo number
-    const lsBingoNumber = parseInt(
-      localStorage.getItem(LOCAL_STORAGE_BINGO_NUMBER_KEY),
-      10
-    );
-    if (lsBingoNumber !== this.ls.bingoNumber) {
-      const positive = lsBingoNumber > 0;
-      this.ls.bingoNumber = lsBingoNumber;
+    const newTime = performance.now();
+    if (newTime - this.startTime >= this.maxTime) {
+      this.startTime = newTime;
 
-      const found = this.numberValues.find(
-        x => x.value === Math.abs(lsBingoNumber) - 1
+      // Bingo number
+      const lsBingoNumber = parseInt(
+        localStorage.getItem(LOCAL_STORAGE_BINGO_NUMBER_KEY),
+        10
       );
-      
-      if (!found) {
-        return;
+
+      if (lsBingoNumber !== this.ls.bingoNumber) {
+        const positive = lsBingoNumber > 0;
+        this.ls.bingoNumber = lsBingoNumber;
+
+        const found = this.numberValues.find(
+          x => x.value === Math.abs(lsBingoNumber) - 1
+        );
+
+        if (found) {
+          found.state = positive;
+        }
       }
 
-      found.state = positive;
-    }
+      // Bingo serie
+      const lsBingoSerie = localStorage.getItem(LOCAL_STORAGE_BINGO_SERIE_KEY);
+      if (lsBingoSerie !== this.ls.bingoSerie) {
+        this.ls.bingoSerie = lsBingoSerie;
+      }
 
-    // Bingo serie
-    const lsBingoSerie = localStorage.getItem(LOCAL_STORAGE_BINGO_SERIE_KEY);
-    if (lsBingoSerie !== this.ls.bingoSerie) {
-      this.ls.bingoSerie = lsBingoSerie;
-    }
+      // Bingo reset
+      const lsBingoReset = parseInt(
+        localStorage.getItem(LOCAL_STORAGE_BINGO_RESET_KEY),
+        10
+      );
+      console.log(lsBingoReset);
+      if (lsBingoReset === 1) {
+        this.resetBingo();
+        setTimeout(
+          () => localStorage.setItem(LOCAL_STORAGE_BINGO_RESET_KEY, '0'),
+          2000
+        );
+      }
 
-    // Bingo reset
-    const lsBingoReset = parseInt(localStorage.getItem(LOCAL_STORAGE_BINGO_RESET_KEY), 10);
-    if (lsBingoReset === 1) {
-      localStorage.setItem(LOCAL_STORAGE_BINGO_RESET_KEY, '0');
-      this.resetBingo();
+      // Bingo reset
+      const lsBingoLine = parseInt(
+        localStorage.getItem(LOCAL_STORAGE_BINGO_LINE_KEY),
+        10
+      );
+      console.log(lsBingoLine);
+      if (lsBingoLine === 1) {
+        this.animateLine();
+        setTimeout(
+          () => localStorage.setItem(LOCAL_STORAGE_BINGO_LINE_KEY, '0'),
+          2000
+        );
+      }
     }
 
     requestAnimationFrame(() => this.watchForMessages());
@@ -163,6 +211,22 @@ export default class extends Vue {
     z-index: 10;
 
     &.is-destroying {
+      animation: blink $animation-speed-default infinite;
+      display: block;
+    }
+  }
+
+  &-title_line {
+    color: $color-primary;
+    display: none;
+    font-size: 11rem;
+    top: 15vh;
+    position: fixed;
+    text-align: center;
+    width: 100%;
+    z-index: 10;
+
+    &.is-line {
       animation: blink $animation-speed-default infinite;
       display: block;
     }
