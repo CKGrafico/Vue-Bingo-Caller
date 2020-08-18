@@ -3,8 +3,8 @@
     <div class="admin-section">
       <h3>Toggle bingo number (1 - 90)</h3>
       <input class="admin-input" type="number" v-model="numberInput" @focus="onFocusNumberInput">
-      <button class="admin-button" @click="onClickChangeSignButton">-X</button>
       <button class="admin-button"  @click="onClickSendNumberInput">Send</button>
+      <button class="admin-button" @click="onClickChangeSignButton">-X</button>
     </div>
 
     <div class="admin-section">
@@ -14,9 +14,9 @@
     </div>
 
     <div class="admin-section">
-      <h3>Reset the bingo</h3>
+      <h3>Reset the bingo (click twice)</h3>
       <button class="admin-button" @dblclick="onClickResetBingo">BINGO!</button>
-      <button class="admin-button">----</button>
+      <button class="admin-button is-disabled">----</button>
       <button class="admin-button" @dblclick="onClickLine">LINE!</button>
     </div>
 
@@ -64,7 +64,7 @@ export default class extends Vue {
 
   public onClickResetBingo(): void {
     localStorage.setItem(LOCAL_STORAGE_BINGO_RESET_KEY, '1');
-    setTimeout(() => this.onLoadFrame(), 4000);
+    setTimeout(() => window.location.reload(), 3000);
   }
 
   public onClickLine(): void {
