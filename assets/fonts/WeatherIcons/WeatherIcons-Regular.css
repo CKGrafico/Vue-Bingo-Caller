@@ -1,0 +1,12 @@
+@font-face {
+    font-family: "Weather Icons";
+    src: url("WeatherIcons-Regular.eot"); /* IE9 */
+    src: url("WeatherIcons-Regular.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */
+    url("WeatherIcons-Regular.woff") format("woff"), /* chrome, firefox */
+    url("WeatherIcons-Regular.ttf") format("truetype"), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
+    url("WeatherIcons-Regular.svg#Weather Icons") format("svg"); /* iOS 4.1- */
+    font-style: normal;
+    font-weight: normal;
+}
+
+
