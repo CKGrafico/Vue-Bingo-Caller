@@ -1,10 +1,15 @@
 <template>
   <section class="bingo">
-    <img
-      class="bingo-logo"
-      src="/assets/images/logo.png"
-      @dblclick="onClickLogo"
-    />
+    <router-link
+      to="/admin"
+      target="_blank"
+    >
+      <img
+        class="bingo-logo"
+        src="/assets/images/logo.png"
+        @dblclick="onClickLogo"
+      />
+    </router-link>
     <div class="bingo-serie">{{ls.bingoSerie}}</div>
     <h1
       class="bingo-title"
@@ -31,22 +36,22 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import Number from './Number.vue';
+import { Component, Vue } from "vue-property-decorator";
+import Number from "./Number.vue";
 import {
   LOCAL_STORAGE_BINGO_NUMBER_KEY,
   LOCAL_STORAGE_BINGO_SERIE_KEY,
   LOCAL_STORAGE_BINGO_RESET_KEY,
-  LOCAL_STORAGE_BINGO_LINE_KEY
-} from '../shared';
+  LOCAL_STORAGE_BINGO_LINE_KEY,
+} from "../shared";
 
 @Component({
   components: {
-    Number
-  }
+    Number,
+  },
 })
 export default class extends Vue {
-  public name = 'Bingo';
+  public name = "Bingo";
   public numbersCount = 90;
   public numberValues = [];
   public destroying = false;
@@ -55,7 +60,7 @@ export default class extends Vue {
   public maxTime = 500;
   public ls = {
     bingoNumber: -1,
-    bingoSerie: '-'
+    bingoSerie: "-",
   };
 
   public created(): void {
@@ -66,10 +71,10 @@ export default class extends Vue {
   public async onClickLogo(): Promise<void> {
     try {
       const options = {
-        okText: '👍🏻',
-        cancelText: '🚫'
+        okText: "👍🏻",
+        cancelText: "🚫",
       };
-      const confirmed = await this.$dialog.confirm('', options);
+      const confirmed = await this.$dialog.confirm("", options);
       await this.resetBingo();
     } catch (e) {
       // ok
@@ -77,25 +82,26 @@ export default class extends Vue {
   }
 
   private initBingo(): void {
-    this.numberValues = [...Array(this.numbersCount).keys()].map(x => ({
+    this.numberValues = [...Array(this.numbersCount).keys()].map((x) => ({
       value: x,
-      state: false
+      state: false,
     }));
   }
 
   private async resetBingo(): Promise<void> {
     await this.destroyBingoUI();
     this.numberValues = [];
-    localStorage.setItem(LOCAL_STORAGE_BINGO_SERIE_KEY, '-');
-    localStorage.setItem(LOCAL_STORAGE_BINGO_NUMBER_KEY, '0');
+    localStorage.setItem(LOCAL_STORAGE_BINGO_SERIE_KEY, "-");
+    localStorage.setItem(LOCAL_STORAGE_BINGO_NUMBER_KEY, "0");
     this.ls.bingoNumber = 0;
-    this.ls.bingoSerie = '-';
+    this.ls.bingoSerie = "-";
     await this.$nextTick();
     this.initBingo();
   }
 
-  private asynv; animateLine(): Promise<void> {
-    return new Promise(resolve => {
+  private asynv;
+  animateLine(): Promise<void> {
+    return new Promise((resolve) => {
       this.line = true;
       setTimeout(() => {
         this.line = false;
@@ -105,7 +111,7 @@ export default class extends Vue {
   }
 
   private async destroyBingoUI(): Promise<{}> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       this.destroying = true;
       setTimeout(() => {
         this.destroying = false;
@@ -132,7 +138,7 @@ export default class extends Vue {
         this.ls.bingoNumber = lsBingoNumber;
 
         const found = this.numberValues.find(
-          x => x.value === Math.abs(lsBingoNumber) - 1
+          (x) => x.value === Math.abs(lsBingoNumber) - 1
         );
 
         if (found) {
@@ -147,15 +153,19 @@ export default class extends Vue {
       }
 
       // Bingo reset
-      const lsBingoReset = parseInt(
+      let lsBingoReset = parseInt(
         localStorage.getItem(LOCAL_STORAGE_BINGO_RESET_KEY),
         10
       );
-      console.log(lsBingoReset);
+
+      if (isNaN(lsBingoReset)) {
+        lsBingoReset = 0;
+      }
+
       if (lsBingoReset === 1) {
         this.resetBingo();
         setTimeout(
-          () => localStorage.setItem(LOCAL_STORAGE_BINGO_RESET_KEY, '0'),
+          () => localStorage.setItem(LOCAL_STORAGE_BINGO_RESET_KEY, "0"),
           2000
         );
       }
@@ -169,7 +179,7 @@ export default class extends Vue {
       if (lsBingoLine === 1) {
         this.animateLine();
         setTimeout(
-          () => localStorage.setItem(LOCAL_STORAGE_BINGO_LINE_KEY, '0'),
+          () => localStorage.setItem(LOCAL_STORAGE_BINGO_LINE_KEY, "0"),
           2000
         );
       }
