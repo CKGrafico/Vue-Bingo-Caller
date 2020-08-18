@@ -1,9 +1,6 @@
 <template>
   <section class="bingo">
-    <router-link
-      to="/admin"
-      target="_blank"
-    >
+    <router-link to="/admin">
       <img
         class="bingo-logo"
         src="/assets/images/logo.png"
@@ -171,11 +168,15 @@ export default class extends Vue {
       }
 
       // Bingo reset
-      const lsBingoLine = parseInt(
+      let lsBingoLine = parseInt(
         localStorage.getItem(LOCAL_STORAGE_BINGO_LINE_KEY),
         10
       );
-      console.log(lsBingoLine);
+
+      if (isNaN(lsBingoLine)) {
+        lsBingoLine = 0;
+      }
+
       if (lsBingoLine === 1) {
         this.animateLine();
         setTimeout(
