@@ -65,7 +65,7 @@
     "gulp-newer": "^1.4.0",
     "gulp-noop": "^1.0.0",
     "gulp-replace": "^1.0.0",
-    "gulp-sass": "^4.0.1",
+    "gulp-sass": "^4.1.0",
     "gulp-sourcemaps": "^2.6.4",
     "gulp-style-aliases": "^1.1.11",
     "gulp-stylelint": "^7.0.0",
